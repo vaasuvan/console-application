@@ -106,7 +106,7 @@ public class Main {
         // display menu based on user selection
         switch (READ_MENU) {
             case "1":
-//                getAllUsers();
+                getUserSearchingTerms();
                 break;
             case "2":
 //                getById();
@@ -118,6 +118,15 @@ public class Main {
                 System.out.println("INVALID SELECTION");
                 break;
         }
+
+    }
+
+    private static void getUserSearchingTerms(){
+        Scanner userInput = new Scanner(System.in);
+        String READ_MENU;
+        System.out.println("ENTER SEARCH TERM : ");
+
+        READ_MENU = userInput.next();
 
     }
 
