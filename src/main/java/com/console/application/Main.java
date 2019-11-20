@@ -114,15 +114,7 @@ public class Main {
      */
     private static void getOrganizationSearchingTerms(ClassLoader classLoader) {
 
-        File organizationFile = new File(classLoader.getResource(organizationFileName).getFile());
-        ArrayList<Organization> organizations = null;
-        try {
-            organizations = mapper.readValue(organizationFile,
-                    new TypeReference<ArrayList<Organization>>() {
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ArrayList<Organization> organizations = getOrganizations(classLoader);
         Scanner userInput = new Scanner(System.in);
         String READ_MENU;
         System.out.println("ENTER ORGANIZATION ID : ");
@@ -151,31 +143,14 @@ public class Main {
     }
 
     private static List<String> getUserNameByOrgId(ClassLoader classLoader, Integer orgId) {
-        File userFile = new File(classLoader.getResource(userFileName).getFile());
-        ArrayList<User> users = null;
-        try {
-            users = mapper.readValue(userFile,
-                    new TypeReference<ArrayList<User>>() {
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        ArrayList<User> users = getUsers(classLoader);
         List<User> userList = users.stream().filter(user -> orgId.equals(user.getOrganization_id())).collect(Collectors.toList());
         List<String> stringList = userList.stream().map(user -> user.getName()).collect(Collectors.toList());
         return stringList;
     }
 
     private static List<String> getTicketSubjectBtOrgId(ClassLoader classLoader, Integer orgId) {
-        File ticketFile = new File(classLoader.getResource(ticketsFileName).getFile());
-        ArrayList<Ticket> tickets = null;
-        try {
-            tickets = mapper.readValue(ticketFile,
-                    new TypeReference<ArrayList<Ticket>>() {
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ArrayList<Ticket> tickets = getTickets(classLoader);
         List<Ticket> ticketList = tickets.stream().filter(ticket -> orgId.equals(ticket.getOrganization_id())).collect(Collectors.toList());
         List<String> stringList = ticketList.stream().map(ticket -> ticket.getSubject()).collect(Collectors.toList());
         return stringList;
@@ -187,15 +162,7 @@ public class Main {
      * @param classLoader
      */
     private static void getUsersSearchingTerms(ClassLoader classLoader) {
-        File userFile = new File(classLoader.getResource(userFileName).getFile());
-        ArrayList<User> users = null;
-        try {
-            users = mapper.readValue(userFile,
-                    new TypeReference<ArrayList<User>>() {
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ArrayList<User> users = getUsers(classLoader);
         Scanner userInput = new Scanner(System.in);
         String READ_MENU;
         System.out.println("ENTER USER ID : ");
@@ -206,29 +173,34 @@ public class Main {
         List<User> userList = users.stream().filter(user -> user.get_id().equals(userId)).collect(Collectors.toList());
         if (userList.size() > 0) {
             userList.forEach((user) -> {
-                System.out.format("%-15s - %4d\n", "ID", user.get_id());
-                System.out.format("%-15s - %4s\n", "URL", user.getUrl());
-                System.out.format("%-15s - %4s\n", "EXTERNAL_ID ", user.getExternal_id());
-                System.out.format("%-15s - %4s\n", "NAME ", user.getName());
-                System.out.format("%-15s - %4s\n", "ALIAS ", user.getAlias());
-                System.out.format("%-15s - %4s\n", "CREATED_AT ", user.getCreated_at());
-                System.out.format("%-15s - %4s\n", "ACTIVE ", user.getActive());
-                System.out.printf("%-15s - %4s\n", "VERIFIED ", user.getVerified());
-                System.out.printf("%-15s - %4s\n", "SHARED ", user.getShared());
-                System.out.format("%-15s - %4s\n", "LOCALE ", user.getLocale());
-                System.out.printf("%-15s - %4s\n", "TIME_ZONE ", user.getTimezone());
-                System.out.printf("%-15s - %4s\n", "LAST_LOGIN_AT ", user.getLast_login_at());
-                System.out.printf("%-15s - %4s\n", "EMAIL ", user.getEmail());
-                System.out.format("%-15s - %4s\n", "PHONE ", user.getPhone());
-                System.out.printf("%-15s - %4s\n", "SIGNATURE", user.getSignature());
-                System.out.printf("%-15s - %4s\n", "ORGANIZATION_ID ", user.getOrganization_id());
-                System.out.printf("%-15s - %4s\n", "TAGS ", user.getTags());
-                System.out.printf("%-15s - %4s\n", "SUSPENDED ", user.getSuspended());
-                System.out.printf("%-15s - %4s\n", "ROLE ", user.getRole());
+                System.out.format("%-20s - %4d\n", "ID", user.get_id());
+                System.out.format("%-20s - %4s\n", "URL", user.getUrl());
+                System.out.format("%-20s - %4s\n", "EXTERNAL_ID ", user.getExternal_id());
+                System.out.format("%-20s - %4s\n", "NAME ", user.getName());
+                System.out.format("%-20s - %4s\n", "ALIAS ", user.getAlias());
+                System.out.format("%-20s - %4s\n", "CREATED_AT ", user.getCreated_at());
+                System.out.format("%-20s - %4s\n", "ACTIVE ", user.getActive());
+                System.out.printf("%-20s - %4s\n", "VERIFIED ", user.getVerified());
+                System.out.printf("%-20s - %4s\n", "SHARED ", user.getShared());
+                System.out.format("%-20s - %4s\n", "LOCALE ", user.getLocale());
+                System.out.printf("%-20s - %4s\n", "TIME_ZONE ", user.getTimezone());
+                System.out.printf("%-20s - %4s\n", "LAST_LOGIN_AT ", user.getLast_login_at());
+                System.out.printf("%-20s - %4s\n", "EMAIL ", user.getEmail());
+                System.out.format("%-20s - %4s\n", "PHONE ", user.getPhone());
+                System.out.printf("%-20s - %4s\n", "SIGNATURE", user.getSignature());
+                System.out.printf("%-20s - %4s\n", "ORGANIZATION_ID ", user.getOrganization_id());
+                System.out.printf("%-20s - %4s\n", "TAGS ", user.getTags());
+                System.out.printf("%-20s - %4s\n", "SUSPENDED ", user.getSuspended());
+                System.out.printf("%-20s - %4s\n", "ROLE ", user.getRole());
                 List<Ticket> ticketList = getTickets(classLoader);
-                List<Ticket> tickets = ticketList.stream().filter(ticket-> userId.equals(ticket.getAssignee_id())).collect(Collectors.toList());
+                List<Ticket> tickets = ticketList.stream().filter(ticket -> userId.equals(ticket.getAssignee_id())).collect(Collectors.toList());
                 List<String> list = tickets.stream().map(ticket -> ticket.getSubject()).collect(Collectors.toList());
-                System.out.printf("%-15s - %4s\n", "SUBMITTED_SUBJECT ", list);
+                System.out.printf("%-20s - %4s\n", "ASSIGNEE_SUBJECT ", list);
+                List<String> ticketsSubmitted = ticketList.stream().filter(ticket -> userId.equals(ticket.getSubmitter_id())).map(t -> t.getSubject()).collect(Collectors.toList());
+                System.out.printf("%-20s - %4s\n", "SUBMITTED_SUBJECT ", ticketsSubmitted);
+                List<Organization> organizations = getOrganizations(classLoader);
+                List<String> listOrg = organizations.stream().filter(organization -> user.getOrganization_id().equals(organization.get_id())).map(o->o.getName()).collect(Collectors.toList());
+                System.out.printf("%-20s - %4s\n", "ORGANIZATIONS_NAMES ", listOrg);
             });
         } else {
             System.out.printf("******NO RESULT FOUND**********");
@@ -236,7 +208,7 @@ public class Main {
         printConsoleSearchCriteria(classLoader);
     }
 
-    private static List<Ticket> getTickets(ClassLoader classLoader) {
+    private static ArrayList<Ticket> getTickets(ClassLoader classLoader) {
         File ticketFile = new File(classLoader.getResource(ticketsFileName).getFile());
         ArrayList<Ticket> tickets = null;
         try {
@@ -249,6 +221,32 @@ public class Main {
         return tickets;
     }
 
+    private static ArrayList<Organization> getOrganizations(ClassLoader classLoader) {
+        File organizationFile = new File(classLoader.getResource(organizationFileName).getFile());
+        ArrayList<Organization> organizations = null;
+        try {
+            organizations = mapper.readValue(organizationFile,
+                    new TypeReference<ArrayList<Organization>>() {
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return organizations;
+    }
+
+    private static ArrayList<User> getUsers(ClassLoader classLoader) {
+        File userFile = new File(classLoader.getResource(userFileName).getFile());
+        ArrayList<User> users = null;
+        try {
+            users = mapper.readValue(userFile,
+                    new TypeReference<ArrayList<User>>() {
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
     /**
      * related to Tickets entity search
      *
@@ -256,15 +254,7 @@ public class Main {
      */
     private static void getTicketsSearchingTerms(ClassLoader classLoader) {
 
-        File ticketFile = new File(classLoader.getResource(ticketsFileName).getFile());
-        ArrayList<Ticket> tickets = null;
-        try {
-            tickets = mapper.readValue(ticketFile,
-                    new TypeReference<ArrayList<Ticket>>() {
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ArrayList<Ticket> tickets = getTickets(classLoader);
         Scanner userInput = new Scanner(System.in);
         String READ_MENU;
         System.out.println("ENTER TICKET ID : ");
@@ -290,6 +280,16 @@ public class Main {
                 System.out.printf("%-19s - %4s\n", "HAS_INCIDENTS ", ticket.getHas_incidents());
                 System.out.format("%-19s - %4s\n", "DUE_AT ", ticket.getDue_at());
                 System.out.printf("%-19s - %4s\n", "VIA", ticket.getVia());
+
+                List<User> list = getUsers(classLoader);
+                List<String> assigneeName= list.stream().filter(user-> ticket.getAssignee_id().equals(user.get_id())).map(user -> user.getName()).collect(Collectors.toList());
+                System.out.printf("%-19s - %4s\n", "ASSIGNEE_NAME", assigneeName);
+                List<String> submitterName= list.stream().filter(user-> ticket.getSubmitter_id().equals(user.get_id())).map(user -> user.getName()).collect(Collectors.toList());
+                System.out.printf("%-19s - %4s\n", "SUBMITTER_NAME", submitterName);
+                List<Organization> organizations = getOrganizations(classLoader);
+                List<String> listOrg = organizations.stream().filter(organization -> ticket.getOrganization_id().equals(organization.get_id())).map(o->o.getName()).collect(Collectors.toList());
+                System.out.printf("%-19s - %4s\n", "ORGANIZATIONS_NAMES ", listOrg);
+
             });
         } else {
             System.out.printf("******NO RESULT FOUND**********");
