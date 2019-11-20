@@ -13,15 +13,16 @@ import java.util.Scanner;
 
 public class Main {
 
+    private static String userFileName = "json/users.json";
+    private static String organizationFileName = "json/organizations.json";
+    private static String ticketsFileName = "json/tickets.json";
     public static void main(String[] args) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
 
             printConsolePrompt();
 
-            String userFileName = "json/users.json";
-            String organizationFileName = "json/organizations.json";
-            String ticketsFileName = "json/tickets.json";
+
 
             ClassLoader classLoader = new Main().getClass().getClassLoader();
 
@@ -127,6 +128,8 @@ public class Main {
         System.out.println("ENTER SEARCH TERM : ");
 
         READ_MENU = userInput.next();
+
+
 
     }
 
