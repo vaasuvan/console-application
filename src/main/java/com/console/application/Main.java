@@ -3,40 +3,47 @@ package com.console.application;
 import com.console.application.model.Organization;
 import com.console.application.model.Ticket;
 import com.console.application.model.User;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
         ObjectMapper objectMapper = new ObjectMapper();
-//        User user[] = null;
         try {
+
+            printConsolePrompt();
+
             String userFileName = "json/users.json";
             String organizationFileName = "json/organizations.json";
             String ticketsFileName = "json/tickets.json";
 
             ClassLoader classLoader = new Main().getClass().getClassLoader();
 
-           /* TypeFactory typeFactory = objectMapper.getTypeFactory();
-            CollectionType collectionType = typeFactory.constructCollectionType(
-                    List.class, DocumentationTool.Location.class);*/
-           // user json convert
-//            File file = new File(classLoader.getResource(fileName).getFile());
-           /* User[] user = objectMapper.readValue(file, User[].class);
-            System.out.println(user.toString());*/
+            // user json convert
+            File userFile = new File(classLoader.getResource(userFileName).getFile());
+            ArrayList<User> users = objectMapper.readValue(userFile,
+                    new TypeReference<ArrayList<User>>() {
+                    });
+            System.out.println(users.toString());
 
+            File organizationFile = new File(classLoader.getResource(organizationFileName).getFile());
+            ObjectMapper mapper = new ObjectMapper();
+            ArrayList<Organization> organizations = mapper.readValue(organizationFile,
+                    new TypeReference<ArrayList<Organization>>() {
+                    });
 
+            System.out.println(organizations.toString());
             // organization json convert
-          /*  File file = new File(classLoader.getResource(organizationFileName).getFile());
-            Organization[] organizations = objectMapper.readValue(file, Organization[].class);
-            System.out.println(organizations.toString());*/
-
-            // organization json convert
-            File file = new File(classLoader.getResource(ticketsFileName).getFile());
-            Ticket[] tickets = objectMapper.readValue(file, Ticket[].class);
+            File ticketFile = new File(classLoader.getResource(ticketsFileName).getFile());
+            ArrayList<Ticket> tickets = objectMapper.readValue(ticketFile,
+                    new TypeReference<ArrayList<Ticket>>() {
+                    });
             System.out.println(tickets.toString());
 
 
@@ -44,4 +51,75 @@ public class Main {
             e.printStackTrace();
         }
     }
+
+
+    private static void printConsolePrompt(){
+        Scanner userInput = new Scanner(System.in);
+        String READ_MENU;
+        // Display menu graphics
+        System.out.println("*****************************************");
+        System.out.println("|   SEARCH FROM JSON FILE EXAMPLE      	|");
+        System.out.println("*****************************************");
+        System.out.println("| Select a Search Options:              |");
+        System.out.println("|        1. GET RECORDS SEARCH OPTION   |");
+        System.out.println("|        2. GET SEARCHABLE FIELDS       |");
+        System.out.println("|        3. EXIT                        |");
+        System.out.println("*****************************************");
+
+        READ_MENU = userInput.next();
+
+        // display menu based on user selection
+        switch (READ_MENU) {
+            case "1":
+                printConsoleSearchCriteria();
+                break;
+            case "2":
+//                getById();
+                break;
+            case "3":
+//                checkAvailableUsername();
+                break;
+            case "4":
+                System.exit(0);
+                break;
+            default:
+                System.out.println("INVALID SELECTION");
+                break;
+        }
+
+
+    }
+
+    private static void printConsoleSearchCriteria(){
+        Scanner userInput = new Scanner(System.in);
+        String READ_MENU;
+        // Display menu graphics
+        System.out.println("*****************************************");
+        System.out.println("| Select :                              |");
+        System.out.println("|        1. USERS                       |");
+        System.out.println("|        2. TICKETS                     |");
+        System.out.println("|        3. ORGANIZATIONS               |");
+        System.out.println("*****************************************");
+
+        READ_MENU = userInput.next();
+
+        // display menu based on user selection
+        switch (READ_MENU) {
+            case "1":
+//                getAllUsers();
+                break;
+            case "2":
+//                getById();
+                break;
+            case "3":
+//                checkAvailableUsername();
+                break;
+            default:
+                System.out.println("INVALID SELECTION");
+                break;
+        }
+
+    }
+
+
 }
