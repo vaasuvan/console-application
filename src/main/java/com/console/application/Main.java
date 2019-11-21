@@ -8,9 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +24,7 @@ public class Main {
 
     public static void main(String[] args) {
         ClassLoader classLoader = new Main().getClass().getClassLoader();
+
         printConsolePrompt(classLoader);
     }
 
@@ -55,12 +54,9 @@ public class Main {
                 printConsoleSearchCriteria(classLoader);
                 break;
             case "2":
-                printConsoleSearchCriteria(classLoader);
+                printSearchableFiels(classLoader);
                 break;
             case "3":
-                printConsoleSearchCriteria(classLoader);
-                break;
-            case "4":
                 System.exit(0);
                 break;
             default:
@@ -105,6 +101,37 @@ public class Main {
                 printConsoleSearchCriteria(classLoader);
                 break;
         }
+    }
+
+
+    private static void printSearchableFiels(ClassLoader classLoader){
+
+        File organizationFile = new File(classLoader.getResource(organizationFileName).getFile());
+        ArrayList<Map<String,Object>> organizations = null;
+        try {
+            organizations = mapper.readValue(organizationFile,
+                    new TypeReference<ArrayList<Map<String,Object>>>() {
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<Set<String>> orgList = organizations != null ? organizations.stream().map(m -> m.keySet()).collect(Collectors.toList()) : null;
+        System.out.println("*******ORGANIZATION SEARCHABLE FIELDS***********");
+        System.out.println(Objects.requireNonNull(orgList).get(0));
+
+        File userFile = new File(classLoader.getResource(userFileName).getFile());
+        ArrayList<Map<String,Object>> users = null;
+        try {
+            users = mapper.readValue(userFile,
+                    new TypeReference<ArrayList<Map<String,Object>>>() {
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<Set<String>> userList = users != null ? users.stream().map(m -> m.keySet()).collect(Collectors.toList()) : null;
+        System.out.println("*******USER SEARCHABLE FIELDS***********");
+        System.out.println(Objects.requireNonNull(userList).get(0));
+
     }
 
     /**
