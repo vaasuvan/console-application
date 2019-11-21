@@ -117,7 +117,8 @@ public class Main {
         }
         List<Set<String>> orgList = organizations != null ? organizations.stream().map(m -> m.keySet()).collect(Collectors.toList()) : null;
         System.out.println("*******ORGANIZATION SEARCHABLE FIELDS***********");
-        System.out.println(Objects.requireNonNull(orgList).get(0));
+        Objects.requireNonNull(orgList).get(0).forEach(System.out::println);
+        System.out.println("************************************************");
 
         File userFile = new File(classLoader.getResource(userFileName).getFile());
         ArrayList<Map<String,Object>> users = null;
@@ -129,8 +130,23 @@ public class Main {
             e.printStackTrace();
         }
         List<Set<String>> userList = users != null ? users.stream().map(m -> m.keySet()).collect(Collectors.toList()) : null;
-        System.out.println("*******USER SEARCHABLE FIELDS***********");
-        System.out.println(Objects.requireNonNull(userList).get(0));
+        System.out.println("**********USER SEARCHABLE FIELDS****************");
+        Objects.requireNonNull(userList).get(0).forEach(System.out::println);
+        System.out.println("************************************************");
+
+        File ticketFile = new File(classLoader.getResource(ticketsFileName).getFile());
+        ArrayList<Map<String,Object>> tickets = null;
+        try {
+            tickets = mapper.readValue(ticketFile,
+                    new TypeReference<ArrayList<Map<String,Object>>>() {
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<Set<String>> ticketList = tickets != null ? tickets.stream().map(m -> m.keySet()).collect(Collectors.toList()) : null;
+        System.out.println("**********TICKET SEARCHABLE FIELDS**************");
+        Objects.requireNonNull(ticketList).get(0).forEach(System.out::println);
+        System.out.println("************************************************");
 
     }
 
